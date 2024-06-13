@@ -10,8 +10,8 @@ import javax.sound.sampled.*;
 /**
  * Starting class for the application. Starts the Graphical User Interface. Application will default to English language
  * unless the Locale is detected as Spain or code is forced to be in Spanish.
- * Success and failure sounds are royalty free and were downloaded from Pixabay, https://pixabay.com/sound-effects/search/?duration=0-30.
- * MP3 files converted to wav using online converter tool, see https://www.freeconvert.com/audio-converter
+ * Success and failure sounds are royalty free and were downloaded from <a href="https://pixabay.com/sound-effects/search/?duration=0-30">Pixabay</a>.
+ * MP3 files converted to wav using online converter tool, see <a href="https://www.freeconvert.com/audio-converter">FreeConvert</a>.
  *
  * @author ahart
  */

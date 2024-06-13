@@ -9,8 +9,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="c41dc35b-d321-4954-a369-d91bbf1adac1" name="Changes" comment="UI internationalised to English and Spanish. Main class renamed to Agent and moved to same package as other classes.">
-      <change afterPath="$PROJECT_DIR$/src/main/java/nclan/ahart/ac/mqtt/MsgListener.java" afterDir="false" />
+    <list default="true" id="c41dc35b-d321-4954-a369-d91bbf1adac1" name="Changes" comment="Error and general information handling consolidated.">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/nclan/ahart/ac/mqtt/Agent.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/nclan/ahart/ac/mqtt/Agent.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/nclan/ahart/ac/mqtt/PubSubUI.form" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/nclan/ahart/ac/mqtt/PubSubUI.form" afterDir="false" />
@@ -95,7 +94,15 @@
       <option name="project" value="LOCAL" />
       <updated>1718293556169</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="Error and general information handling consolidated.">
+      <option name="closed" value="true" />
+      <created>1718298145065</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1718298145065</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -112,14 +119,15 @@
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Most things work." />
     <MESSAGE value="UI internationalised to English and Spanish. Main class renamed to Agent and moved to same package as other classes." />
-    <option name="LAST_COMMIT_MESSAGE" value="UI internationalised to English and Spanish. Main class renamed to Agent and moved to same package as other classes." />
+    <MESSAGE value="Error and general information handling consolidated." />
+    <option name="LAST_COMMIT_MESSAGE" value="Error and general information handling consolidated." />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
       <breakpoints>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/main/java/nclan/ahart/ac/mqtt/Pubsub.java</url>
-          <line>103</line>
+          <line>102</line>
           <option name="timeStamp" value="5" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">

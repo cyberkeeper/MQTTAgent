@@ -304,7 +304,7 @@ public class PubSubUI implements MsgListener {
      */
     @Override
     public void onMessageSent(String topic, Boolean success) {
-        JOptionPane.showMessageDialog(mainAppPanel, Agent.bundle.getString("deliveryComplete: ") + Boolean.toString(success), Agent.bundle.getString("information"), JOptionPane.INFORMATION_MESSAGE);
+        JOptionPane.showMessageDialog(mainAppPanel, Agent.bundle.getString("deliveryComplete")+": " + Boolean.toString(success), Agent.bundle.getString("information"), JOptionPane.INFORMATION_MESSAGE);
     }
 
     /**

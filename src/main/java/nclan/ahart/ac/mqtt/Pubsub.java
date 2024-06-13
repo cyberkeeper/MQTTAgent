@@ -4,7 +4,6 @@ import java.util.UUID;
 
 import org.eclipse.paho.client.mqttv3.*;
 
-import javax.swing.*;
 
 /**
  * Helper methods for connecting, publishing and connecting to MQTT broker.
@@ -42,7 +41,7 @@ public class Pubsub {
      * @throws Exception is something went wrong
      */
     public MqttClient connectToBroker(String broker, String clientId, String user, char[] passwd) throws Exception {
-        MqttClient client = null;
+        MqttClient client;
         try {
             //if client id is null or blank generate a random identifier
             if (clientId == null || clientId.isBlank())
@@ -76,16 +75,16 @@ public class Pubsub {
      * @param client MqTT client to disconnect from broker.
      * @return True is connection successful else false. Will also return true if the supplied client was null or
      * not connected.
+     * @throws Exception if something went wrong
      */
-    public boolean disconnectBroker(MqttClient client) {
+    public boolean disconnectBroker(MqttClient client) throws Exception{
         if (client != null && client.isConnected()) {
             try {
                 client.disconnect();
                 client.close();
                 return true;
             } catch (MqttException e) {
-                e.printStackTrace();
-                return true;
+                throw new Exception(e.getMessage());
             }
         }
         return false;
