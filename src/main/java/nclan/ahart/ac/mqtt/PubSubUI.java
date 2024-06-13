@@ -181,7 +181,7 @@ public class PubSubUI implements MsgListener {
      */
     private void handleMsgArrived(String topic, String msg) {
         StringBuilder sbMsg = new StringBuilder(topic).append(": ");
-        sbMsg.append(new String(msg) + "\n");
+        sbMsg.append(msg).append("\n");
         txtSubMsgs.append(sbMsg.toString());
     }
 
@@ -304,7 +304,7 @@ public class PubSubUI implements MsgListener {
      */
     @Override
     public void onMessageSent(String topic, Boolean success) {
-        JOptionPane.showMessageDialog(mainAppPanel, Agent.bundle.getString("deliveryComplete")+": " + Boolean.toString(success), Agent.bundle.getString("information"), JOptionPane.INFORMATION_MESSAGE);
+        JOptionPane.showMessageDialog(mainAppPanel, Agent.bundle.getString("deliveryComplete")+": " + success, Agent.bundle.getString("information"), JOptionPane.INFORMATION_MESSAGE);
     }
 
     /**
