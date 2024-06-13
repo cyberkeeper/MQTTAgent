@@ -5,8 +5,8 @@ import org.eclipse.paho.client.mqttv3.*;
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.ResourceBundle;
 import java.util.Set;
 import java.util.UUID;
 
@@ -16,8 +16,9 @@ import java.util.UUID;
  * @author ahart
  */
 public class PubSubUI {
+    private static ResourceBundle bundle;
     private JTabbedPane tabbedPane1;
-    public JPanel mainAppPanel;
+    public JPanel mainAppPanel;  //public to allow creation from else where.
     private JTextField txtBroker;
     private JTextField txtID;
     private JButton btnGenerate;
@@ -36,12 +37,10 @@ public class PubSubUI {
     private JPanel Connector;
     private JComboBox cbTopics;
     private JComboBox cbSubscribedTopics;
-    private JPanel pubConnectPanel;
+    private JPanel ConnectDetailPanel;
     private JButton btnClear;
     private Pubsub conn = new Pubsub();
     private MqttClient client;
-
-    private ArrayList<SubClient> subscribers = new ArrayList<>();
 
     /**
      * Constructor sets up the action listeners.
@@ -56,6 +55,7 @@ public class PubSubUI {
             @Override
             public void actionPerformed(ActionEvent e) {
                 txtID.setText(UUID.randomUUID().toString());
+                Agent.playSuccessSound();
             }
         });
         btnConnect.addActionListener(new ActionListener() {
@@ -66,28 +66,7 @@ public class PubSubUI {
              */
             @Override
             public void actionPerformed(ActionEvent e) {
-                if (client != null && client.isConnected()) {
-                    try {
-                        client.disconnect();
-                        client.close();
-                        client = null;
-                        lblStatus.setText("Disconnected");
-                        updateEditables(true);
-                        btnConnect.setText("Connect");
-                    } catch (MqttException ex) {
-                        //throw new RuntimeException(ex);
-                        lblStatus.setText(ex.getMessage());
-                    }
-                } else {
-                    try {
-                        client = setupConn(txtBroker.getText(), txtPort.getText(), txtID.getText(), txtUserId.getText(), txtPassword.getPassword());
-                        lblStatus.setText(client.getServerURI());
-                        updateEditables(false);
-                        btnConnect.setText("Disconnect");
-                    } catch (Exception err) {
-                        JOptionPane.showMessageDialog(pubMsgPanel, err.getMessage(), "Error", JOptionPane.WARNING_MESSAGE);
-                    }
-                }
+                handleConnect();
             }
         });
         btnPublish.addActionListener(new ActionListener() {
@@ -98,14 +77,7 @@ public class PubSubUI {
              */
             @Override
             public void actionPerformed(ActionEvent e) {
-                try {
-                    String topic = cbTopics.getSelectedItem().toString();
-                    conn.sendMsg(client, topic, txtMsgs.getText().strip());
-                    cbTopics.addItem(topic);
-                    JOptionPane.showMessageDialog(pubMsgPanel, "Message published", "Information", JOptionPane.INFORMATION_MESSAGE);
-                } catch (Exception err) {
-                    JOptionPane.showMessageDialog(pubMsgPanel, err.getMessage(), "Error", JOptionPane.WARNING_MESSAGE);
-                }
+                handlePublish();
             }
         });
 
@@ -117,8 +89,7 @@ public class PubSubUI {
              */
             @Override
             public void actionPerformed(ActionEvent e) {
-                String topic = cbSubscribedTopics.getSelectedItem().toString();
-                setupSubConn(client, topic);
+                handleSubscribe();
             }
         });
         btnUnSub.addActionListener(new ActionListener() {
@@ -129,7 +100,7 @@ public class PubSubUI {
              */
             @Override
             public void actionPerformed(ActionEvent e) {
-
+                handleUnSubscribe();
             }
         });
         btnClear.addActionListener(new ActionListener() {
@@ -143,6 +114,64 @@ public class PubSubUI {
                 txtSubMsgs.setText("");
             }
         });
+    }
+
+    /**
+     * Connect to the specified MQTT broker
+     */
+    private void handleConnect() {
+        if (client != null && client.isConnected()) {
+            try {
+                client.disconnect();
+                client.close();
+                client = null;
+                lblStatus.setText(Agent.bundle.getString("disconnected"));
+                updateEditables(true);
+                btnConnect.setText(Agent.bundle.getString("connect"));
+            } catch (MqttException ex) {
+                //throw new RuntimeException(ex);
+                lblStatus.setText(ex.getMessage());
+            }
+        } else {
+            try {
+                client = setupConn(txtBroker.getText(), txtPort.getText(), txtID.getText(), txtUserId.getText(), txtPassword.getPassword());
+                lblStatus.setText(client.getServerURI());
+                updateEditables(false);
+                btnConnect.setText(Agent.bundle.getString("disconnect"));
+
+            } catch (Exception err) {
+                JOptionPane.showMessageDialog(pubMsgPanel, err.getMessage(), "Error", JOptionPane.WARNING_MESSAGE);
+            }
+        }
+    }
+
+    /**
+     * Publish the supplied text to the specified topic on the broker
+     */
+    private void handlePublish() {
+        try {
+            String topic = cbTopics.getSelectedItem().toString();
+            conn.sendMsg(client, topic, txtMsgs.getText().strip());
+            cbTopics.addItem(topic);
+            JOptionPane.showMessageDialog(pubMsgPanel, Agent.bundle.getString("msgPublished"), Agent.bundle.getString("information"), JOptionPane.INFORMATION_MESSAGE);
+        } catch (Exception err) {
+            JOptionPane.showMessageDialog(pubMsgPanel, err.getMessage(), "Error", JOptionPane.WARNING_MESSAGE);
+        }
+    }
+
+    /**
+     * Subscribe to the supplied topic on the connected broker
+     */
+    private void handleSubscribe() {
+        String topic = cbSubscribedTopics.getSelectedItem().toString();
+        setupSubConn(client, topic);
+    }
+
+    /**
+     * Unsubscribe to the supplied topic on the connected broker
+     */
+    private void handleUnSubscribe() {
+
     }
 
     /**
@@ -162,11 +191,11 @@ public class PubSubUI {
     /**
      * Get a connection to the MQTT broker specified in the GUI
      *
-     * @param broker
-     * @param port
-     * @param clientID
-     * @param user
-     * @param password
+     * @param broker   MQTT broker, supply IP address or hostname
+     * @param port     port number for broker
+     * @param clientID unique identifier for the client trying to connect
+     * @param user     if authentication is set up supply a username
+     * @param password if authentication is set up supply a password
      * @return Return connected client or null if something went wrong
      * @throws Exception
      */
@@ -178,16 +207,16 @@ public class PubSubUI {
         MqttClient client = null;
 
         //check that we have what is needed to connect
-        String err = "Incorrect data supplied";
+        String err = Agent.bundle.getString("badData");
         boolean exc = false;
         if (broker.isBlank()) {
-            err = "Broker must be supplied";
+            err = Agent.bundle.getString("badBroker");
             exc = true;
         } else {
             broker = "tcp://" + broker + ":" + port;
         }
         if (clientID.isBlank()) {
-            err = "Unique identifier must be supplied";
+            err = Agent.bundle.getString("badID");
             exc = true;
         }
 
@@ -214,7 +243,7 @@ public class PubSubUI {
      * @return Return connected client or null if something went wrong
      */
     private MqttClient setupSubConn(MqttClient client, String topic) {
-        String err = "Incorrect data supplied";
+        String err = Agent.bundle.getString("badData");
         boolean exc = false;
         try {
             if (client != null && client.isConnected()) {
@@ -228,7 +257,6 @@ public class PubSubUI {
             err = me.getMessage();
             exc = true;
         }
-
 
         //report any errors
         if (exc) {
@@ -257,7 +285,7 @@ public class PubSubUI {
 
                     //listens for delivery complete event
                     public void deliveryComplete(IMqttDeliveryToken token) {
-                        JOptionPane.showMessageDialog(subMessagePanel, "deliveryComplete: " + token.isComplete(), "Error", JOptionPane.INFORMATION_MESSAGE);
+                        JOptionPane.showMessageDialog(subMessagePanel, Agent.bundle.getString("deliveryComplete") + token.isComplete(), Agent.bundle.getString("information"), JOptionPane.INFORMATION_MESSAGE);
                     }
                 });
                 client.subscribe(topic, 1);

@@ -9,25 +9,20 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="c41dc35b-d321-4954-a369-d91bbf1adac1" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/artifacts/MQTTClient_jar.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/encodings.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/resourceBundles.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/uiDesigner.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/Main.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/nclan/ahart/ac/mqtt/PubSubUI.form" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/nclan/ahart/ac/mqtt/PubSubUI.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/nclan/ahart/ac/mqtt/Pubsub.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/nclan/ahart/ac/mqtt/SubClient.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/META-INF/MANIFEST.MF" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/message.properties" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/message_en_GB.properties" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/message_es.properties" afterDir="false" />
+    <list default="true" id="c41dc35b-d321-4954-a369-d91bbf1adac1" name="Changes" comment="Most things work.">
+      <change afterPath="$PROJECT_DIR$/src/main/java/nclan/ahart/ac/mqtt/Agent.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/images/cat.ico" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/images/cat.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/resourceBundles.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/Main.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/nclan/ahart/ac/mqtt/PubSubUI.form" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/nclan/ahart/ac/mqtt/PubSubUI.form" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/nclan/ahart/ac/mqtt/PubSubUI.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/nclan/ahart/ac/mqtt/PubSubUI.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/nclan/ahart/ac/mqtt/Pubsub.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/nclan/ahart/ac/mqtt/Pubsub.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/nclan/ahart/ac/mqtt/SubClient.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/message.properties" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/message.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/message_en_GB.properties" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/message_es.properties" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/message_es.properties" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -59,16 +54,22 @@
     "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "SHARE_PROJECT_CONFIGURATION_FILES": "true",
-    "UI_DESIGNER_EDITOR_MODE.PaletteManager.SHOW": "true",
+    "UI_DESIGNER_EDITOR_MODE.PaletteManager.SHOW": "false",
     "UI_DESIGNER_EDITOR_MODE.UIDesignerToolWindowManager.WIDTH": "337",
-    "project.structure.last.edited": "Artifacts",
+    "last_opened_file_path": "E:/sourceCode/Java/MQTTDemo/MQTTClient/src/main/resources/images",
+    "project.structure.last.edited": "Modules",
     "project.structure.proportion": "0.15",
     "project.structure.side.proportion": "0.2",
     "settings.editor.selected.configurable": "MavenSettings"
   }
 }]]></component>
   <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="E:\sourceCode\Java\MQTTDemo\MQTTClient\src\main\resources\images" />
+      <recent name="E:\sourceCode\Java\MQTTDemo\MQTTClient\src\main\resources" />
+    </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="E:\sourceCode\Java\MQTTDemo\MQTTClient\src\main\resources\images" />
       <recent name="E:\sourceCode\Java\MQTTDemo\MQTTClient\src\main\resources" />
       <recent name="E:\sourceCode\Java\MQTTDemo\MQTTClient\src\main\resources\messages" />
     </key>
@@ -82,6 +83,15 @@
       <option name="presentableId" value="Default" />
       <updated>1716199301756</updated>
     </task>
+    <task id="LOCAL-00001" summary="Most things work.">
+      <option name="closed" value="true" />
+      <created>1717607133768</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1717607133768</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -95,13 +105,22 @@
       </map>
     </option>
   </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="Most things work." />
+    <option name="LAST_COMMIT_MESSAGE" value="Most things work." />
+  </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
       <breakpoints>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/main/java/nclan/ahart/ac/mqtt/Pubsub.java</url>
-          <line>96</line>
+          <line>98</line>
           <option name="timeStamp" value="5" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/nclan/ahart/ac/mqtt/Agent.java</url>
+          <line>111</line>
+          <option name="timeStamp" value="7" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

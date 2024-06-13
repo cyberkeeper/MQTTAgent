@@ -4,7 +4,9 @@ import java.util.UUID;
 import org.eclipse.paho.client.mqttv3.*;
 
 /**
- * Dependency has been added to the pom.xml file.
+ * Helper methods for connecting, publishing and connecting to MQTT broker.
+ * @author ahart
+ * A dependency has been added to the pom.xml file for the required library.
  * <dependency>
  * <groupId>org.eclipse.paho</groupId>
  * <artifactId>org.eclipse.paho.client.mqttv3</artifactId>
@@ -124,6 +126,7 @@ public class Pubsub {
                     }
                     //listens for connection lost event
                     public void connectionLost(Throwable cause) {
+
                         System.out.println("connectionLost: " + cause.getMessage());
                     }
                     //listens for delivery complete event
