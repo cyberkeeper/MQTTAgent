@@ -1,10 +1,14 @@
 package nclan.ahart.ac.mqtt;
 
 import java.util.UUID;
+
 import org.eclipse.paho.client.mqttv3.*;
+
+import javax.swing.*;
 
 /**
  * Helper methods for connecting, publishing and connecting to MQTT broker.
+ *
  * @author ahart
  * A dependency has been added to the pom.xml file for the required library.
  * <dependency>
@@ -14,7 +18,6 @@ import org.eclipse.paho.client.mqttv3.*;
  * </dependency>
  */
 public class Pubsub {
-   // protected String topic = "topic/test";
     /**
      * Subscription QoS
      * 0, at most once. Message could be lost.
@@ -36,8 +39,9 @@ public class Pubsub {
      * @param broker   the broker to connect to
      * @param clientId identifier to uniquely identify this client.
      * @return MqttClient if connection was made, else null
+     * @throws Exception is something went wrong
      */
-    public MqttClient connectToBroker(String broker, String clientId, String user, char[] passwd) throws MqttException{
+    public MqttClient connectToBroker(String broker, String clientId, String user, char[] passwd) throws Exception {
         MqttClient client = null;
         try {
             //if client id is null or blank generate a random identifier
@@ -61,7 +65,7 @@ public class Pubsub {
                 return client;
             }
         } catch (MqttException e) {
-            e.printStackTrace();
+            throw new Exception(e.getMessage());
         }
         return null;
     }
@@ -92,8 +96,9 @@ public class Pubsub {
      *
      * @param client MQtt client that the message will be sent via.
      * @param msg    message to be sent, no checks are made on the supplied string.
+     * @throws Exception is something went wrong
      */
-    public void sendMsg(MqttClient client, String topic, String msg) {
+    public void sendMsg(MqttClient client, String topic, String msg) throws Exception {
 
         try {
             if (client != null && client.isConnected()) {
@@ -103,42 +108,37 @@ public class Pubsub {
                 client.publish(topic, message);
             }
         } catch (MqttException e) {
-            e.printStackTrace();
+            throw new Exception(e.getMessage());
         }
     }
 
     /**
-     *
-     * @param client
-     * @return
+     * @param client MQTT client to get message from
+     * @param topic  Topic that message is being received from
      */
-    public MqttMessage getMsg(MqttClient client) {
-        final MqttMessage[] gotMsg = {null};
+    public void getMsg(MqttClient client, String topic, MsgListener ears) {
         try {
             if (client != null && client.isConnected()) {
                 client.setCallback(new MqttCallback() {
                     //listens for a msg arrived event, gets the content of the received message
                     public void messageArrived(String topic, MqttMessage message) {
-                        //System.out.println("topic: " + topic);
-                        //System.out.println("qos: " + message.getQos());
-                        //System.out.println("message content: " + new String(message.getPayload()));
-                        gotMsg[0] = message;
+                        ears.onMessageArrived(topic, new String(message.getPayload()));
                     }
+
                     //listens for connection lost event
                     public void connectionLost(Throwable cause) {
-
-                        System.out.println("connectionLost: " + cause.getMessage());
+                        ears.onMessageError(cause.getMessage());
                     }
+
                     //listens for delivery complete event
                     public void deliveryComplete(IMqttDeliveryToken token) {
-                        System.out.println("deliveryComplete: " + token.isComplete());
+                        ears.onMessageSent(topic, token.isComplete());
                     }
                 });
-                client.subscribe("update", subQos);
+                client.subscribe(topic, 1);
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            ears.onMessageError(e.getMessage());
         }
-        return gotMsg[0];
     }
 }

@@ -6,7 +6,6 @@ import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.HashSet;
-import java.util.ResourceBundle;
 import java.util.Set;
 import java.util.UUID;
 
@@ -15,8 +14,7 @@ import java.util.UUID;
  *
  * @author ahart
  */
-public class PubSubUI {
-    private static ResourceBundle bundle;
+public class PubSubUI implements MsgListener {
     private JTabbedPane tabbedPane1;
     public JPanel mainAppPanel;  //public to allow creation from else where.
     private JTextField txtBroker;
@@ -121,6 +119,7 @@ public class PubSubUI {
      */
     private void handleConnect() {
         if (client != null && client.isConnected()) {
+            //if already connected disconnect
             try {
                 client.disconnect();
                 client.close();
@@ -129,18 +128,18 @@ public class PubSubUI {
                 updateEditables(true);
                 btnConnect.setText(Agent.bundle.getString("connect"));
             } catch (MqttException ex) {
-                //throw new RuntimeException(ex);
+                onMessageError(ex.getMessage());
                 lblStatus.setText(ex.getMessage());
             }
         } else {
+            //not connected, so connect
             try {
                 client = setupConn(txtBroker.getText(), txtPort.getText(), txtID.getText(), txtUserId.getText(), txtPassword.getPassword());
                 lblStatus.setText(client.getServerURI());
                 updateEditables(false);
                 btnConnect.setText(Agent.bundle.getString("disconnect"));
-
             } catch (Exception err) {
-                JOptionPane.showMessageDialog(pubMsgPanel, err.getMessage(), "Error", JOptionPane.WARNING_MESSAGE);
+                onMessageError(err.getMessage());
             }
         }
     }
@@ -153,9 +152,9 @@ public class PubSubUI {
             String topic = cbTopics.getSelectedItem().toString();
             conn.sendMsg(client, topic, txtMsgs.getText().strip());
             cbTopics.addItem(topic);
-            JOptionPane.showMessageDialog(pubMsgPanel, Agent.bundle.getString("msgPublished"), Agent.bundle.getString("information"), JOptionPane.INFORMATION_MESSAGE);
+            onInfo(Agent.bundle.getString("msgPublished"));
         } catch (Exception err) {
-            JOptionPane.showMessageDialog(pubMsgPanel, err.getMessage(), "Error", JOptionPane.WARNING_MESSAGE);
+            onMessageError(err.getMessage());
         }
     }
 
@@ -164,7 +163,7 @@ public class PubSubUI {
      */
     private void handleSubscribe() {
         String topic = cbSubscribedTopics.getSelectedItem().toString();
-        setupSubConn(client, topic);
+        setupSubscription(client, topic);
     }
 
     /**
@@ -172,6 +171,18 @@ public class PubSubUI {
      */
     private void handleUnSubscribe() {
 
+    }
+
+    /**
+     * Add the supplied topic and message to the JTextArea
+     *
+     * @param topic Topic the message arrived on
+     * @param msg   The message that arrived
+     */
+    private void handleMsgArrived(String topic, String msg) {
+        StringBuilder sbMsg = new StringBuilder(topic).append(": ");
+        sbMsg.append(new String(msg) + "\n");
+        txtSubMsgs.append(sbMsg.toString());
     }
 
     /**
@@ -197,7 +208,7 @@ public class PubSubUI {
      * @param user     if authentication is set up supply a username
      * @param password if authentication is set up supply a password
      * @return Return connected client or null if something went wrong
-     * @throws Exception
+     * @throws Exception If any error occurred an exception is thrown
      */
     private MqttClient setupConn(String broker, String port, String clientID, String user, char[] password) throws Exception {
         //cleanup supplied data, strip off any leading or trailing spaces
@@ -242,12 +253,12 @@ public class PubSubUI {
      *
      * @return Return connected client or null if something went wrong
      */
-    private MqttClient setupSubConn(MqttClient client, String topic) {
+    private MqttClient setupSubscription(MqttClient client, String topic) {
         String err = Agent.bundle.getString("badData");
         boolean exc = false;
         try {
             if (client != null && client.isConnected()) {
-                getMsg(client, topic);
+                conn.getMsg(client, topic, this);
                 //SubClient newClient = new SubClient(client, (tfSubTopic.getText()));
                 //subscribers.add(newClient);
                 //cbSubcribedTo.addItem(newClient);
@@ -260,48 +271,65 @@ public class PubSubUI {
 
         //report any errors
         if (exc) {
-            JOptionPane.showMessageDialog(subMessagePanel, err, "Error", JOptionPane.WARNING_MESSAGE);
+            this.onMessageError(err);
         }
         return client;
     }
 
-
-    public void getMsg(MqttClient client, String topic) throws Exception {
-        try {
-            if (client != null && client.isConnected()) {
-                client.setCallback(new MqttCallback() {
-                    //listens for a msg arrived event, gets the content of the received message
-                    public void messageArrived(String topic, MqttMessage message) {
-                        StringBuilder sbMsg = new StringBuilder(topic).append(": ");
-                        sbMsg.append(new String(message.getPayload()) + "\n");
-                        txtSubMsgs.append(sbMsg.toString());
-                    }
-
-                    //listens for connection lost event
-                    public void connectionLost(Throwable cause) {
-                        JOptionPane.showMessageDialog(subMessagePanel, cause.getMessage(), "Error", JOptionPane.WARNING_MESSAGE);
-                        //throw new Exception(cause.getMessage());
-                    }
-
-                    //listens for delivery complete event
-                    public void deliveryComplete(IMqttDeliveryToken token) {
-                        JOptionPane.showMessageDialog(subMessagePanel, Agent.bundle.getString("deliveryComplete") + token.isComplete(), Agent.bundle.getString("information"), JOptionPane.INFORMATION_MESSAGE);
-                    }
-                });
-                client.subscribe(topic, 1);
-            }
-        } catch (Exception e) {
-//            e.printStackTrace();
-            JOptionPane.showMessageDialog(subMessagePanel, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-        }
-    }
-
+    /**
+     * Setup bespoke components
+     */
     private void createUIComponents() {
-        // TODO: place custom component creation code here
+        //going to use a bespoke version of the JCombobox that does not allow duplicates.
         cbTopics = new JComboBox<>(new UniqueComboBoxModel<>());
         cbSubscribedTopics = new JComboBox(new UniqueComboBoxModel());
     }
 
+    /**
+     * Listen for a message arriving to a subscribed topic event.
+     *
+     * @param topic   Topic that message arrived on
+     * @param message Message that arrived
+     */
+    @Override
+    public void onMessageArrived(String topic, String message) {
+        handleMsgArrived(topic, message);
+    }
+
+    /**
+     * Listen for a delivery complete event.
+     *
+     * @param topic   Topic that message arrived on
+     * @param success True if message delivery successfully, else false
+     */
+    @Override
+    public void onMessageSent(String topic, Boolean success) {
+        JOptionPane.showMessageDialog(mainAppPanel, Agent.bundle.getString("deliveryComplete: ") + Boolean.toString(success), Agent.bundle.getString("information"), JOptionPane.INFORMATION_MESSAGE);
+    }
+
+    /**
+     * Listen for an error event. Also used to generally show error messages when they occur
+     *
+     * @param message Error message
+     */
+    @Override
+    public void onMessageError(String message) {
+        JOptionPane.showMessageDialog(mainAppPanel, message, "Error", JOptionPane.WARNING_MESSAGE);
+    }
+
+    /**
+     * Listen for an information event. Also used to generally show error messages when they occur
+     *
+     * @param message Information event
+     */
+    public void onInfo(String message) {
+        JOptionPane.showMessageDialog(mainAppPanel, message, Agent.bundle.getString("information"), JOptionPane.INFORMATION_MESSAGE);
+    }
+
+    /**
+     * Bespoke version of ComboBoxModel that does not allow duplicate entries to be added
+     * @param <T> Element to be added to the model
+     */
     class UniqueComboBoxModel<T> extends DefaultComboBoxModel<T> {
 
         private final Set<T> uniqueItems = new HashSet<>();

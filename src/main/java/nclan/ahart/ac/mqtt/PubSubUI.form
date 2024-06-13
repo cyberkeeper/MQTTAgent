@@ -96,6 +96,7 @@
                         </constraints>
                         <properties>
                           <text resource-bundle="message" key="generate"/>
+                          <toolTipText resource-bundle="message" key="ttGenerate"/>
                         </properties>
                       </component>
                       <component id="bc12d" class="javax.swing.JLabel">

@@ -17,6 +17,9 @@ import javax.sound.sampled.*;
  */
 public class Agent {
 
+    /**
+     * The resource bundle that contains all the text for the GUI.
+     */
     public static ResourceBundle bundle;
     public static final String SUCCESS_SOUND = "/sounds/success-1-6297.wav";
     public static final String FAILURE_SOUND = "/sounds/failure-1-89170.wav";
@@ -84,7 +87,7 @@ public class Agent {
      * @return ResourceBundle to be used
      */
     public static ResourceBundle setupLocale(String bundleName) throws MissingResourceException {
-        ResourceBundle bundle = null;
+        ResourceBundle bundle;
         try {
         /*find out or set which locale are we running from, default should be en_GB, use the es locale for testing
         only uncomment one of the following lines.
@@ -107,6 +110,10 @@ public class Agent {
         return bundle;
     }
 
+    /**
+     * Play a wav sound file.
+     * @param soundPath file to be played.
+     */
     public static void playSound(String soundPath) {
         try {
             AudioInputStream audioStream = AudioSystem.getAudioInputStream(Agent.class.getResource(soundPath));
@@ -138,7 +145,7 @@ public class Agent {
     /**
      * Play failure sound. If something goes wrong with sound effect nothing will be played.
      */
-    public static void playFailureSound() {  // Similar logic for error sound
+    public static void playFailureSound() {
         playSound(FAILURE_SOUND);
     }
 }
