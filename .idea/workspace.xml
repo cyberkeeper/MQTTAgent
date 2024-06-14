@@ -9,9 +9,12 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="c41dc35b-d321-4954-a369-d91bbf1adac1" name="Changes" comment="Code analysis warnings dealt with.">
+    <list default="true" id="c41dc35b-d321-4954-a369-d91bbf1adac1" name="Changes" comment="Unsubscribing implemented.">
+      <change afterPath="$PROJECT_DIR$/src/main/java/nclan/ahart/ac/mqtt/PlaySound.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/nclan/ahart/ac/mqtt/Agent.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/nclan/ahart/ac/mqtt/Agent.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/nclan/ahart/ac/mqtt/MsgListener.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/nclan/ahart/ac/mqtt/MsgListener.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/nclan/ahart/ac/mqtt/PubSubUI.form" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/nclan/ahart/ac/mqtt/PubSubUI.form" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/nclan/ahart/ac/mqtt/PubSubUI.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/nclan/ahart/ac/mqtt/PubSubUI.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/resources/message.properties" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/message.properties" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/resources/message_es.properties" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/message_es.properties" afterDir="false" />
@@ -24,8 +27,8 @@
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
-        <option value="Class" />
         <option value="Interface" />
+        <option value="Class" />
       </list>
     </option>
   </component>
@@ -116,7 +119,15 @@
       <option name="project" value="LOCAL" />
       <updated>1718298807082</updated>
     </task>
-    <option name="localTasksCounter" value="6" />
+    <task id="LOCAL-00006" summary="Unsubscribing implemented.">
+      <option name="closed" value="true" />
+      <created>1718358633979</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1718358633979</updated>
+    </task>
+    <option name="localTasksCounter" value="7" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -135,6 +146,14 @@
     <MESSAGE value="UI internationalised to English and Spanish. Main class renamed to Agent and moved to same package as other classes." />
     <MESSAGE value="Error and general information handling consolidated." />
     <MESSAGE value="Code analysis warnings dealt with." />
-    <option name="LAST_COMMIT_MESSAGE" value="Code analysis warnings dealt with." />
+    <MESSAGE value="Unsubscribing implemented." />
+    <option name="LAST_COMMIT_MESSAGE" value="Unsubscribing implemented." />
+  </component>
+  <component name="XDebuggerManager">
+    <watches-manager>
+      <configuration name="Application">
+        <watch expression="line" />
+      </configuration>
+    </watches-manager>
   </component>
 </project>

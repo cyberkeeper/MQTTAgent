@@ -338,6 +338,7 @@
                         </constraints>
                         <properties>
                           <editable value="true"/>
+                          <toolTipText resource-bundle="message" key="ttTopic"/>
                         </properties>
                       </component>
                       <component id="40971" class="javax.swing.JButton" binding="btnSub">

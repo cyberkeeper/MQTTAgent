@@ -39,6 +39,8 @@ public class PubSubUI implements MsgListener {
     private JButton btnClear;
     private Pubsub conn = new Pubsub();
     private MqttClient client;
+    //keep track if there is an active connection to a MQTT broker
+    private Boolean connected = false;
 
     /**
      * Constructor sets up the action listeners.
@@ -54,7 +56,6 @@ public class PubSubUI implements MsgListener {
             @Override
             public void actionPerformed(ActionEvent e) {
                 txtID.setText(UUID.randomUUID().toString());
-                Agent.playSuccessSound();
             }
         });
         btnConnect.addActionListener(new ActionListener() {
@@ -128,6 +129,7 @@ public class PubSubUI implements MsgListener {
                 lblStatus.setText(Agent.bundle.getString("disconnected"));
                 updateEditables(true);
                 btnConnect.setText(Agent.bundle.getString("connect"));
+                connected = false;
             } catch (MqttException ex) {
                 onMessageError(ex.getMessage());
                 lblStatus.setText(ex.getMessage());
@@ -139,8 +141,11 @@ public class PubSubUI implements MsgListener {
                 lblStatus.setText(client.getServerURI());
                 updateEditables(false);
                 btnConnect.setText(Agent.bundle.getString("disconnect"));
+                connected = true;
+                Agent.playSuccessSound();
             } catch (Exception err) {
                 onMessageError(err.getMessage());
+                connected = false;
             }
         }
     }
@@ -150,10 +155,14 @@ public class PubSubUI implements MsgListener {
      */
     private void handlePublish() {
         try {
-            String topic = cbTopics.getSelectedItem().toString();
-            conn.sendMsg(client, topic, txtMsgs.getText().strip());
-            cbTopics.addItem(topic);
-            //onInfo(Agent.bundle.getString("msgPublished"));
+            if((cbTopics.getSelectedItem() !=null) && (cbTopics.getSelectedItem().toString().length()!=0)) {
+                String topic = cbTopics.getSelectedItem().toString();
+                conn.sendMsg(client, topic, txtMsgs.getText().strip());
+                cbTopics.addItem(topic);
+                onInfo(Agent.bundle.getString("msgPublished"));
+            }else{
+                onInfo(Agent.bundle.getString("badTopic"));
+            }
         } catch (Exception err) {
             onMessageError(err.getMessage());
         }
@@ -163,9 +172,13 @@ public class PubSubUI implements MsgListener {
      * Subscribe to the supplied topic on the connected broker
      */
     private void handleSubscribe() {
-        String topic = cbSubscribedTopics.getSelectedItem().toString();
-        setupSubscription(client, topic);
-        cbSubscribedTopics.addItem(topic);
+        if((cbSubscribedTopics.getSelectedItem()!=null) && (cbSubscribedTopics.getSelectedItem().toString().length()!=0)) {
+            String topic = cbSubscribedTopics.getSelectedItem().toString();
+            setupSubscription(client, topic);
+            cbSubscribedTopics.addItem(topic);
+        }else{
+            onInfo(Agent.bundle.getString("badTopic"));
+        }
     }
 
     /**
@@ -173,7 +186,7 @@ public class PubSubUI implements MsgListener {
      */
     private void handleUnSubscribe() {
         //check that something is selected
-        if(cbSubscribedTopics.getSelectedIndex() != -1) {
+        if (cbSubscribedTopics.getSelectedIndex() != -1) {
             //get the selected item, cast to string
             String topicToDrop = (String) cbSubscribedTopics.getSelectedItem();
             try {
@@ -184,6 +197,8 @@ public class PubSubUI implements MsgListener {
             } catch (MqttException mqe) {
                 onMessageError(Agent.bundle.getString("badUnsub") + topicToDrop);
             }
+        }else{
+            onInfo(Agent.bundle.getString("badTopic"));
         }
     }
 
@@ -302,6 +317,19 @@ public class PubSubUI implements MsgListener {
         //going to use a bespoke version of the JComboBox that has a model which does not allow duplicates.
         cbTopics = new JComboBox<>(new UniqueComboBoxModel<>());
         cbSubscribedTopics = new JComboBox<>(new UniqueComboBoxModel<>());
+/*
+        cbTopics.addItemListener(e->{
+            if(e.getStateChange() == ItemEvent.SELECTED){
+                btnPublish.setEnabled((cbTopics.getSelectedItem()!=null)&&(connected));
+            }
+        });
+
+        cbSubscribedTopics.addItemListener(e->{
+            if(e.getStateChange() == ItemEvent.SELECTED){
+                btnSub.setEnabled((cbSubscribedTopics.getSelectedItem()!=null)&&(connected));
+                btnUnSub.setEnabled((cbSubscribedTopics.getSelectedItem()!=null)&&(connected));
+            }
+        });*/
     }
 
     /**
@@ -323,7 +351,7 @@ public class PubSubUI implements MsgListener {
      */
     @Override
     public void onMessageSent(String topic, Boolean success) {
-        JOptionPane.showMessageDialog(mainAppPanel, Agent.bundle.getString("deliveryComplete")+": " + success, Agent.bundle.getString("information"), JOptionPane.INFORMATION_MESSAGE);
+        JOptionPane.showMessageDialog(mainAppPanel, Agent.bundle.getString("deliveryComplete") + ": " + success, Agent.bundle.getString("information"), JOptionPane.INFORMATION_MESSAGE);
     }
 
     /**
@@ -333,6 +361,8 @@ public class PubSubUI implements MsgListener {
      */
     @Override
     public void onMessageError(String message) {
+        //play sound first, so that it plays while the user reads the error message.
+        Agent.playFailureSound();
         JOptionPane.showMessageDialog(mainAppPanel, message, "Error", JOptionPane.WARNING_MESSAGE);
     }
 
@@ -347,6 +377,7 @@ public class PubSubUI implements MsgListener {
 
     /**
      * Bespoke version of ComboBoxModel that does not allow duplicate entries to be added
+     *
      * @param <T> Element to be added to the model
      */
     class UniqueComboBoxModel<T> extends DefaultComboBoxModel<T> {

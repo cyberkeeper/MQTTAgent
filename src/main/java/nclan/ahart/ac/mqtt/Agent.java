@@ -2,13 +2,9 @@ package nclan.ahart.ac.mqtt;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
-import java.awt.event.WindowListener;
 import java.util.Locale;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
-import javax.sound.sampled.*;
 
 /**
  * Starting class for the application. Starts the Graphical User Interface.
@@ -17,10 +13,11 @@ import javax.sound.sampled.*;
  * subscribers and/or connections nicely.
  * Success and failure sounds are royalty free and were downloaded from <a href="https://pixabay.com/sound-effects/search/?duration=0-30">Pixabay</a>.
  * MP3 files converted to wav using online converter tool, see <a href="https://www.freeconvert.com/audio-converter">FreeConvert</a>.
+ * The sounds are played in separate threads to allow the user to continue doing things in the application.
  *
  * @author ahart
  */
-public class Agent implements WindowListener {
+public class Agent {
 
     /**
      * The resource bundle that contains all the text for the GUI.
@@ -51,7 +48,6 @@ public class Agent implements WindowListener {
 
             //create the JFrame to hold everything
             JFrame myApp = new JFrame(bundle.getString("title"));
-            myApp.addWindowListener(this);
 
             Image image = Toolkit.getDefaultToolkit().getImage(getClass().getResource("/images/cat.png"));
             myApp.setIconImage(image);
@@ -105,129 +101,18 @@ public class Agent implements WindowListener {
     }
 
     /**
-     * Play a wav sound file.
-     * @param soundPath file to be played.
-     */
-    public static void playSound(String soundPath) {
-        try {
-            AudioInputStream audioStream = AudioSystem.getAudioInputStream(Agent.class.getResource(soundPath));
-            AudioFormat format = audioStream.getFormat();
-            DataLine.Info info = new DataLine.Info(SourceDataLine.class, format);
-            SourceDataLine line = (SourceDataLine) AudioSystem.getLine(info);
-            line.open(format);
-            byte[] soundBytes = new byte[audioStream.available()];
-            int nBytesRead;
-            while ((nBytesRead = audioStream.read(soundBytes)) != -1) {
-                line.write(soundBytes, 0, nBytesRead);
-            }
-            line.drain();
-            line.close();
-            audioStream.close();
-        } catch (Exception e) {
-            //failure to play sound effect isn't important, catch error, log it and continue
-            System.out.println("Sound error: " + e.getMessage());
-        }
-    }
-
-    /**
      * Play successful sound. If something goes wrong with sound effect nothing will be played.
      */
     public static void playSuccessSound() {
-        playSound(SUCCESS_SOUND);
+        PlaySound psGood = new PlaySound(SUCCESS_SOUND);
+        psGood.start();
     }
 
     /**
      * Play failure sound. If something goes wrong with sound effect nothing will be played.
      */
     public static void playFailureSound() {
-        playSound(FAILURE_SOUND);
-    }
-
-
-    /**
-     * Invoked the first time a window is made visible.
-     *
-     * @param e the event to be processed
-     */
-    @Override
-    public void windowOpened(WindowEvent e) {
-        //do nothing
-    }
-
-    /**
-     * Invoked when the user attempts to close the window from the window's system menu.
-     * Close down any open subscribers or connections.
-     *
-     * @param e the event to be processed
-     */
-    @Override
-    public void windowClosing(WindowEvent e) {
-        System.out.println("closing");
-    }
-
-    /**
-     * Invoked when a window has been closed as the result
-     * of calling dispose on the window.
-     *
-     * @param e the event to be processed
-     */
-    @Override
-    public void windowClosed(WindowEvent e) {
-        //do nothing
-    }
-
-    /**
-     * Invoked when a window is changed from a normal to a
-     * minimized state. For many platforms, a minimized window
-     * is displayed as the icon specified in the window's
-     * iconImage property.
-     *
-     * @param e the event to be processed
-     * @see Frame#setIconImage
-     */
-    @Override
-    public void windowIconified(WindowEvent e) {
-        //do nothing
-    }
-
-    /**
-     * Invoked when a window is changed from a minimized
-     * to a normal state.
-     *
-     * @param e the event to be processed
-     */
-    @Override
-    public void windowDeiconified(WindowEvent e) {
-        //do nothing
-    }
-
-    /**
-     * Invoked when the Window is set to be the active Window. Only a Frame or
-     * a Dialog can be the active Window. The native windowing system may
-     * denote the active Window or its children with special decorations, such
-     * as a highlighted title bar. The active Window is always either the
-     * focused Window, or the first Frame or Dialog that is an owner of the
-     * focused Window.
-     *
-     * @param e the event to be processed
-     */
-    @Override
-    public void windowActivated(WindowEvent e) {
-        //do nothing
-    }
-
-    /**
-     * Invoked when a Window is no longer the active Window. Only a Frame or a
-     * Dialog can be the active Window. The native windowing system may denote
-     * the active Window or its children with special decorations, such as a
-     * highlighted title bar. The active Window is always either the focused
-     * Window, or the first Frame or Dialog that is an owner of the focused
-     * Window.
-     *
-     * @param e the event to be processed
-     */
-    @Override
-    public void windowDeactivated(WindowEvent e) {
-        //do nothing
+        PlaySound psBad = new PlaySound(FAILURE_SOUND);
+        psBad.start();
     }
 }
