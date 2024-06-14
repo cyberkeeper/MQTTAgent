@@ -2,20 +2,25 @@ package nclan.ahart.ac.mqtt;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
 import java.util.Locale;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 import javax.sound.sampled.*;
 
 /**
- * Starting class for the application. Starts the Graphical User Interface. Application will default to English language
- * unless the Locale is detected as Spain or code is forced to be in Spanish.
+ * Starting class for the application. Starts the Graphical User Interface.
+ * Application will default to English language unless the Locale is detected as Spain or code is forced to be in Spanish.
+ * Implements the WindowListener interface so that the default closing operation can be overriden to close down any open
+ * subscribers and/or connections nicely.
  * Success and failure sounds are royalty free and were downloaded from <a href="https://pixabay.com/sound-effects/search/?duration=0-30">Pixabay</a>.
  * MP3 files converted to wav using online converter tool, see <a href="https://www.freeconvert.com/audio-converter">FreeConvert</a>.
  *
  * @author ahart
  */
-public class Agent {
+public class Agent implements WindowListener {
 
     /**
      * The resource bundle that contains all the text for the GUI.
@@ -41,23 +46,12 @@ public class Agent {
      * Locale to es.
      */
     public void showUI() {
-        /*find out or set which locale are we running from, default should be en_GB, use the es locale for testing
-        only uncomment one of the following lines.
-         */
-        //Locale whereAmI = Locale.getDefault();
-        //Locale whereAmI = Locale.forLanguageTag("es");
-
-        //set the default location for the Java virtual machine
-        //Locale.setDefault(whereAmI);
-
         try {
             bundle = setupLocale("message");
 
-            //get the resource bundle appropriate for the current Locale.
-            // bundle = ResourceBundle.getBundle("message", whereAmI);
-
             //create the JFrame to hold everything
             JFrame myApp = new JFrame(bundle.getString("title"));
+            myApp.addWindowListener(this);
 
             Image image = Toolkit.getDefaultToolkit().getImage(getClass().getResource("/images/cat.png"));
             myApp.setIconImage(image);
@@ -92,8 +86,8 @@ public class Agent {
         /*find out or set which locale are we running from, default should be en_GB, use the es locale for testing
         only uncomment one of the following lines.
          */
-            //Locale whereAmI = Locale.getDefault();
-            Locale whereAmI = Locale.forLanguageTag("es");
+            Locale whereAmI = Locale.getDefault();
+            //Locale whereAmI = Locale.forLanguageTag("es");
 
             //set the default location for the Java virtual machine
             Locale.setDefault(whereAmI);
@@ -147,5 +141,93 @@ public class Agent {
      */
     public static void playFailureSound() {
         playSound(FAILURE_SOUND);
+    }
+
+
+    /**
+     * Invoked the first time a window is made visible.
+     *
+     * @param e the event to be processed
+     */
+    @Override
+    public void windowOpened(WindowEvent e) {
+        //do nothing
+    }
+
+    /**
+     * Invoked when the user attempts to close the window from the window's system menu.
+     * Close down any open subscribers or connections.
+     *
+     * @param e the event to be processed
+     */
+    @Override
+    public void windowClosing(WindowEvent e) {
+        System.out.println("closing");
+    }
+
+    /**
+     * Invoked when a window has been closed as the result
+     * of calling dispose on the window.
+     *
+     * @param e the event to be processed
+     */
+    @Override
+    public void windowClosed(WindowEvent e) {
+        //do nothing
+    }
+
+    /**
+     * Invoked when a window is changed from a normal to a
+     * minimized state. For many platforms, a minimized window
+     * is displayed as the icon specified in the window's
+     * iconImage property.
+     *
+     * @param e the event to be processed
+     * @see Frame#setIconImage
+     */
+    @Override
+    public void windowIconified(WindowEvent e) {
+        //do nothing
+    }
+
+    /**
+     * Invoked when a window is changed from a minimized
+     * to a normal state.
+     *
+     * @param e the event to be processed
+     */
+    @Override
+    public void windowDeiconified(WindowEvent e) {
+        //do nothing
+    }
+
+    /**
+     * Invoked when the Window is set to be the active Window. Only a Frame or
+     * a Dialog can be the active Window. The native windowing system may
+     * denote the active Window or its children with special decorations, such
+     * as a highlighted title bar. The active Window is always either the
+     * focused Window, or the first Frame or Dialog that is an owner of the
+     * focused Window.
+     *
+     * @param e the event to be processed
+     */
+    @Override
+    public void windowActivated(WindowEvent e) {
+        //do nothing
+    }
+
+    /**
+     * Invoked when a Window is no longer the active Window. Only a Frame or a
+     * Dialog can be the active Window. The native windowing system may denote
+     * the active Window or its children with special decorations, such as a
+     * highlighted title bar. The active Window is always either the focused
+     * Window, or the first Frame or Dialog that is an owner of the focused
+     * Window.
+     *
+     * @param e the event to be processed
+     */
+    @Override
+    public void windowDeactivated(WindowEvent e) {
+        //do nothing
     }
 }

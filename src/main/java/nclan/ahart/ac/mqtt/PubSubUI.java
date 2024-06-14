@@ -44,6 +44,7 @@ public class PubSubUI implements MsgListener {
      * Constructor sets up the action listeners.
      */
     public PubSubUI() {
+        updateEditables(true);
         btnGenerate.addActionListener(new ActionListener() {
             /**
              * Invoked when an action occurs.
@@ -152,7 +153,7 @@ public class PubSubUI implements MsgListener {
             String topic = cbTopics.getSelectedItem().toString();
             conn.sendMsg(client, topic, txtMsgs.getText().strip());
             cbTopics.addItem(topic);
-            onInfo(Agent.bundle.getString("msgPublished"));
+            //onInfo(Agent.bundle.getString("msgPublished"));
         } catch (Exception err) {
             onMessageError(err.getMessage());
         }
@@ -164,13 +165,26 @@ public class PubSubUI implements MsgListener {
     private void handleSubscribe() {
         String topic = cbSubscribedTopics.getSelectedItem().toString();
         setupSubscription(client, topic);
+        cbSubscribedTopics.addItem(topic);
     }
 
     /**
      * Unsubscribe to the supplied topic on the connected broker
      */
     private void handleUnSubscribe() {
-
+        //check that something is selected
+        if(cbSubscribedTopics.getSelectedIndex() != -1) {
+            //get the selected item, cast to string
+            String topicToDrop = (String) cbSubscribedTopics.getSelectedItem();
+            try {
+                client.unsubscribe(topicToDrop);
+                onInfo(Agent.bundle.getString("unsubscribed") + topicToDrop);
+                //unsubscribed so remove from JComboBox
+                cbSubscribedTopics.removeItem(topicToDrop);
+            } catch (MqttException mqe) {
+                onMessageError(Agent.bundle.getString("badUnsub") + topicToDrop);
+            }
+        }
     }
 
     /**
@@ -191,12 +205,20 @@ public class PubSubUI implements MsgListener {
      * @param val if true the components are editable else they aren't
      */
     private void updateEditables(boolean val) {
+        //connection screen
         txtBroker.setEnabled(val);
         txtPort.setEnabled(val);
         txtUserId.setEnabled(val);
         txtPassword.setEnabled(val);
         txtID.setEnabled(val);
         btnGenerate.setEnabled(val);
+
+        //publish screen
+        btnPublish.setEnabled(!val);
+
+        //subscribe screen
+        btnSub.setEnabled(!val);
+        btnUnSub.setEnabled(!val);
     }
 
     /**
@@ -259,9 +281,6 @@ public class PubSubUI implements MsgListener {
         try {
             if (client != null && client.isConnected()) {
                 conn.getMsg(client, topic, this);
-                //SubClient newClient = new SubClient(client, (tfSubTopic.getText()));
-                //subscribers.add(newClient);
-                //cbSubcribedTo.addItem(newClient);
             }
 
         } catch (Exception me) {
@@ -280,9 +299,9 @@ public class PubSubUI implements MsgListener {
      * Setup bespoke components
      */
     private void createUIComponents() {
-        //going to use a bespoke version of the JCombobox that does not allow duplicates.
+        //going to use a bespoke version of the JComboBox that has a model which does not allow duplicates.
         cbTopics = new JComboBox<>(new UniqueComboBoxModel<>());
-        cbSubscribedTopics = new JComboBox(new UniqueComboBoxModel());
+        cbSubscribedTopics = new JComboBox<>(new UniqueComboBoxModel<>());
     }
 
     /**
@@ -331,7 +350,6 @@ public class PubSubUI implements MsgListener {
      * @param <T> Element to be added to the model
      */
     class UniqueComboBoxModel<T> extends DefaultComboBoxModel<T> {
-
         private final Set<T> uniqueItems = new HashSet<>();
 
         @Override
