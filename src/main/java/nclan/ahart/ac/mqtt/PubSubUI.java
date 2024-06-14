@@ -3,6 +3,7 @@ package nclan.ahart.ac.mqtt;
 import org.eclipse.paho.client.mqttv3.*;
 
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.HashSet;
@@ -11,7 +12,7 @@ import java.util.UUID;
 
 /**
  * Class bound to the PubSubUI designer form.
- *
+ * Icons downloaded from <a href="https://icons8.com/icons">icons.8.com</a>
  * @author ahart
  */
 public class PubSubUI implements MsgListener {
@@ -41,12 +42,19 @@ public class PubSubUI implements MsgListener {
     private MqttClient client;
     //keep track if there is an active connection to a MQTT broker
     private Boolean connected = false;
+    public static final String GOOD_CONN = "/images/green.png";
+    public static final String NO_CONN = "/images/red.png";
+    ImageIcon noConn, goodConn;
 
     /**
      * Constructor sets up the action listeners.
      */
     public PubSubUI() {
         updateEditables(true);
+        //load icons used to indicate connection status
+        goodConn = new ImageIcon (getClass().getResource(GOOD_CONN));
+        noConn = new ImageIcon (getClass().getResource(NO_CONN));
+
         btnGenerate.addActionListener(new ActionListener() {
             /**
              * Invoked when an action occurs.
@@ -130,6 +138,7 @@ public class PubSubUI implements MsgListener {
                 updateEditables(true);
                 btnConnect.setText(Agent.bundle.getString("connect"));
                 connected = false;
+                lblStatus.setIcon(noConn);
             } catch (MqttException ex) {
                 onMessageError(ex.getMessage());
                 lblStatus.setText(ex.getMessage());
@@ -142,10 +151,12 @@ public class PubSubUI implements MsgListener {
                 updateEditables(false);
                 btnConnect.setText(Agent.bundle.getString("disconnect"));
                 connected = true;
+                lblStatus.setIcon(goodConn);
                 Agent.playSuccessSound();
             } catch (Exception err) {
                 onMessageError(err.getMessage());
                 connected = false;
+                lblStatus.setIcon(noConn);
             }
         }
     }

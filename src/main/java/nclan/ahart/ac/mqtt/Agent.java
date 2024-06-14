@@ -23,8 +23,9 @@ public class Agent {
      * The resource bundle that contains all the text for the GUI.
      */
     public static ResourceBundle bundle;
-    public static final String SUCCESS_SOUND = "/sounds/success-1-6297.wav";
-    public static final String FAILURE_SOUND = "/sounds/failure-1-89170.wav";
+    private static final String SUCCESS_SOUND = "/sounds/success-1-6297.wav";
+    private static final String FAILURE_SOUND = "/sounds/failure-1-89170.wav";
+    private static final String APP_ICON = "/images/cat.png";
 
     /**
      * Main entry point to the application
@@ -49,7 +50,7 @@ public class Agent {
             //create the JFrame to hold everything
             JFrame myApp = new JFrame(bundle.getString("title"));
 
-            Image image = Toolkit.getDefaultToolkit().getImage(getClass().getResource("/images/cat.png"));
+            Image image = Toolkit.getDefaultToolkit().getImage(getClass().getResource(APP_ICON));
             myApp.setIconImage(image);
 
             //add the form created within IntelliJ form designer
