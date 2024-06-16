@@ -6,12 +6,13 @@ This is a tool to help manage MQTT projects. The application is written in Java 
 The original aim of tool was demonostrate an implementation of publisher/subscriber pattern for edcuational purposes. Extra functionality was added to demonstrate other Java concepts. While not 
 necesary for functionality, it is easier to demonstrate some things in more realistic scenarios. They also make the application more 'real'.
 
-- sound, positive and negative sounds added for successful and unsuccessful connection to an MQ broker
-- icons on JLabel change to indicate connection/disconnection
-- threads, the sounds are played in separate threads to avoid interruption to the user
-- interface, used to get events from the MqttCallback class
+- sound, positive and negative sounds added for successful and unsuccessful connection to an MQ broker.
+- icons on JLabel change to indicate connection/disconnection.
+- threads, the sounds are played in separate threads to avoid interruption to the user.
+- interface, used to get events from the MqttCallback class.
 - internationlisation, English and Spanish resource files are included in a resource bundle.
-- Maven build, a pom.xml file is included for building via Maven
+- Maven build, a pom.xml file is included for building via Maven.
+- ComboBoxModel, extends the DefaultComboBoxModel to give a model that only allows unique values.
 
 ## Screenshots
 
