@@ -3,7 +3,6 @@ package nclan.ahart.ac.mqtt;
 import org.eclipse.paho.client.mqttv3.*;
 
 import javax.swing.*;
-import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.HashSet;
@@ -50,7 +49,7 @@ public class PubSubUI implements MsgListener {
      * Constructor sets up the action listeners.
      */
     public PubSubUI() {
-        updateEditables(true);
+
         //load icons used to indicate connection status
         goodConn = new ImageIcon (getClass().getResource(GOOD_CONN));
         noConn = new ImageIcon (getClass().getResource(NO_CONN));
@@ -122,6 +121,8 @@ public class PubSubUI implements MsgListener {
                 txtSubMsgs.setText("");
             }
         });
+
+        updateEditables(true);
     }
 
     /**

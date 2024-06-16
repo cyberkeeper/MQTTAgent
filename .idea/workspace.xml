@@ -2,20 +2,21 @@
 <project version="4">
   <component name="ArtifactsWorkspaceSettings">
     <artifacts-to-build>
-      <artifact name="MQTTClient:jar" />
+      <artifact name="MQTTAgent:jar2" />
     </artifacts-to-build>
   </component>
   <component name="AutoImportSettings">
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="c41dc35b-d321-4954-a369-d91bbf1adac1" name="Changes" comment="Sounds now work and run within separate threads.">
+    <list default="true" id="c41dc35b-d321-4954-a369-d91bbf1adac1" name="Changes" comment="Tooltip text tidied up. Visual indicators of connectivity added.">
+      <change afterPath="$PROJECT_DIR$/.idea/artifacts/MQTTAgent_jar2.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/artifacts/MQTTClient_jar.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/artifacts/MQTTAgent_jar.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/nclan/ahart/ac/mqtt/Agent.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/nclan/ahart/ac/mqtt/Agent.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/nclan/ahart/ac/mqtt/PubSubUI.form" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/nclan/ahart/ac/mqtt/PubSubUI.form" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dependency-reduced-pom.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/nclan/ahart/ac/mqtt/PubSubUI.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/nclan/ahart/ac/mqtt/PubSubUI.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/message.properties" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/message.properties" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/message_es.properties" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/message_es.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/META-INF/MANIFEST.MF" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/META-INF/MANIFEST.MF" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -42,23 +43,24 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;OverrideImplement.generate.javadoc&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
-    &quot;UI_DESIGNER_EDITOR_MODE.PaletteManager.SHOW&quot;: &quot;false&quot;,
-    &quot;UI_DESIGNER_EDITOR_MODE.UIDesignerToolWindowManager.WIDTH&quot;: &quot;337&quot;,
-    &quot;last_opened_file_path&quot;: &quot;E:/sourceCode/Java/MQTTDemo/MQTTClient/src/main/resources/images&quot;,
-    &quot;project.structure.last.edited&quot;: &quot;Modules&quot;,
-    &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
-    &quot;project.structure.side.proportion&quot;: &quot;0.2&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;MavenSettings&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "OverrideImplement.generate.javadoc": "true",
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "UI_DESIGNER_EDITOR_MODE.PaletteManager.SHOW": "false",
+    "UI_DESIGNER_EDITOR_MODE.UIDesignerToolWindowManager.WIDTH": "337",
+    "last_opened_file_path": "E:/sourceCode/Java/MQTTDemo/MQTTClient",
+    "project.structure.last.edited": "Artifacts",
+    "project.structure.proportion": "0.15",
+    "project.structure.side.proportion": "0.2",
+    "settings.editor.selected.configurable": "MavenSettings"
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="E:\sourceCode\Java\MQTTDemo\MQTTClient" />
       <recent name="E:\sourceCode\Java\MQTTDemo\MQTTClient\src\main\resources\images" />
       <recent name="E:\sourceCode\Java\MQTTDemo\MQTTClient\src\main\resources" />
     </key>
@@ -133,7 +135,15 @@
       <option name="project" value="LOCAL" />
       <updated>1718366428525</updated>
     </task>
-    <option name="localTasksCounter" value="8" />
+    <task id="LOCAL-00008" summary="Tooltip text tidied up. Visual indicators of connectivity added.">
+      <option name="closed" value="true" />
+      <created>1718370813149</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1718370813149</updated>
+    </task>
+    <option name="localTasksCounter" value="9" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -154,14 +164,15 @@
     <MESSAGE value="Code analysis warnings dealt with." />
     <MESSAGE value="Unsubscribing implemented." />
     <MESSAGE value="Sounds now work and run within separate threads." />
-    <option name="LAST_COMMIT_MESSAGE" value="Sounds now work and run within separate threads." />
+    <MESSAGE value="Tooltip text tidied up. Visual indicators of connectivity added." />
+    <option name="LAST_COMMIT_MESSAGE" value="Tooltip text tidied up. Visual indicators of connectivity added." />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
       <breakpoints>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/main/java/nclan/ahart/ac/mqtt/PubSubUI.java</url>
-          <line>52</line>
+          <line>51</line>
           <option name="timeStamp" value="18" />
         </line-breakpoint>
       </breakpoints>
